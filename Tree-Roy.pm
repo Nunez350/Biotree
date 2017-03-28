@@ -1,3 +1,4 @@
+testingxssx
 =encoding utf8
 .
 =head1 NAME
@@ -122,7 +123,7 @@ int $nd->id || $nd->internal_id(), "\t", $nd->{xcoord}, "\t", $nd->{xcoord_scale
     my @treelines;
     foreach my $nd (@nd_sorted) {
         my $xscale =  ($nd->{xcoord_scaled});
-        my $dashes = sprintf "%.0f", $nd->branch_length * $scale;
+        my $dashes = sprintf "%.0f", $nd-> branch_length * $scale;
         my $spaces = $xscale - ($dashes -1);
         if ($nd eq $rootnode) {
         #    print " " x $dashes, "|","\n";#, " " x $dashes, "|","\n";
