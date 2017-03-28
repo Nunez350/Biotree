@@ -95,10 +95,31 @@ sub write_tab_tree{
     }
     foreach my $nd (@nd_sorted) {
 	$nd->{xcoord_scaled} = sprintf "%.0f", $scale * $nd->{xcoord};
-	print $nd->id || $nd->internal_id(), "\t", $nd->{xcoord}, "\t", $nd->{xcoord_scaled}, "\t", $nd->branch_length || 0,"\t", $nd->{ycoord},"\n";
+	print $nd->id || $nd->internal_id(), "\t", $nd->{xcoord}, "\t", $nd->{xcoord_scaled}, "\t", $nd->branch_length,"\t", $nd->{ycoord},"\n";
     }
-    my @treelines;
 
+    my @treelines;
+    foreach my $nd (@nd_sorted) {
+        my $xscale =  ($nd->{xcoord_scaled});
+        my $dashes = sprintf "%.0f", $nd->branch_length * $scale;
+        my $spaces = $xscale - ($dashes -1);
+	if ($nd eq $rootnode) {
+	#    print " " x $dashes, "|","\n";#, " " x $dashes, "|","\n";
+	    print " " x $spaces, "-" x $dashes, "", $nd->internal_id, "\n";
+#	    print " " x $dashes, "|","\n";#, " " x $dashes, "|","\n";
+#            push @treelines, sprintf "%s", " " x $dashes, "|","\n";#, " " x $dashes, "|","\n";
+	#    push @treelines, sprintf "%s", " " x $spaces, "-" x $dashes, "", $nd->internal_id, "\n";
+	    #   push @treelines, sprintf "%s",  " " x $dashes, "|","\n";#, " " x $dashes, "|","\n";
+	} elsif ($nd->is_Leaf) {
+	    $largest_int_length = $nd->{ycoord};            
+	    if ($nd->{ycoord} >= $largest_int_length) {
+		print " " x $spaces," |", "-" x $dashes,$nd->id, "\n";
+	    } else { 
+#		print " " x ($spaces/2), "", " " x ($spaces/2),"|", "-" x $dashes, "",$nd->id, "\n";
+int $nd->id || $nd->internal_id(), "\t", $nd->{xcoord}, "\t", $nd->{xcoord_scaled}, "\t", $nd->branch_length,"\t", $nd->{ycoord},"\n";
+    }
+
+    my @treelines;
     foreach my $nd (@nd_sorted) {
         my $xscale =  ($nd->{xcoord_scaled});
         my $dashes = sprintf "%.0f", $nd->branch_length * $scale;
@@ -116,42 +137,23 @@ sub write_tab_tree{
                 print " " x $spaces," |", "-" x $dashes,$nd->id, "\n";
             } else {
 #               print " " x ($spaces/2), "", " " x ($spaces/2),"|", "-" x $dashes, "",$nd->id, "\n";
-		int $nd->id || $nd->internal_id(), "\t", $nd->{xcoord}, "\t", $nd->{xcoord_scaled}, "\t", $nd->branch_length,"\t", $nd->{ycoord},"\n";
-	    }
-
-
-=begin
-    foreach my $nd (@nd_sorted) {
-        my $xscale =  ($nd->{xcoord_scaled});
-        my $dashes = sprintf "%.0f", ($nd->branch_length  || 0)* $scale;
-        my $spaces = $xscale - ($dashes -1);
-	if ($nd eq $rootnode) {
-	#    print " " x $dashes, "|","\n";#, " " x $dashes, "|","\n";
-	    print " " x $spaces, "-" x $dashes, "", $nd->internal_id, "\n";
-#	    print " " x $dashes, "|","\n";#, " " x $dashes, "|","\n";
-#            push @treelines, sprintf "%s", " " x $dashes, "|","\n";#, " " x $dashes, "|","\n";
-	#    push @treelines, sprintf "%s", " " x $spaces, "-" x $dashes, "", $nd->internal_id, "\n";
-	    #   push @treelines, sprintf "%s",  " " x $dashes, "|","\n";#, " " x $dashes, "|","\n";
-	} elsif ($nd->is_Leaf) {
-	    $largest_int_length = $nd->{ycoord};            
-	    if ($nd->{ycoord} >= $largest_int_length) {
-		print " " x $spaces,"f |", "-" x $dashes,$nd->id, "\n";
-	    } else { 
-#		print " " x ($spaces/2), "", " " x ($spaces/2),"|", "-" x $dashes, "",$nd->id, "\n";
+            }
+          }
+        else {
+            print " " x $spaces,"|", "-" x $dashes,$nd->internal_id, "\n";
+        }
+    }
+    return;
+}
 	    } 
 	  } 
 	else {
-#	    $spaces=$spaces+1;
 	    print " " x $spaces,"|", "-" x $dashes,$nd->internal_id, "\n";
-	    
 	}
     }
-#    for (my $i=0; $i<=$#treelines; $i++) {
-#
- #   }
     return;
 }
-=cut
+
 
 
 sub _write_tab_tree_Helper {
